@@ -20,7 +20,7 @@ const InitNavigator = createStackNavigator({
 });
 
 const MainNavigator = createStackNavigator({
-  Homepage: {
+  HomePage: {
     screen: HomePage,
     navigationOptions: {
       header: null
@@ -29,7 +29,7 @@ const MainNavigator = createStackNavigator({
   DetailPage: {
     screen: DetailPage,
     navigationOptions: {
-      header: null
+      //header: null
     }
   }
 });
@@ -41,7 +41,7 @@ export default createAppContainer(
       Main: MainNavigator
     },
     {
-      navigationOptions: {
+      defaultNavigationOptions: {
         header: null
       }
     }
