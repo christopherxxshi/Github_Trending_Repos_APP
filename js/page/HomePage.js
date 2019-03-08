@@ -7,7 +7,6 @@ import { Platform, StyleSheet, Text, View } from "react-native";
 type Props = {};
 import NavigationUtil from "../navigator/NavigationUtil";
 import DynamicTabNavigator from "../navigator/DynamicTabNavigator";
-import actions from "../action";
 import {connect} from "react-redux";
 
 class HomePage extends Component<Props> {
@@ -30,25 +29,6 @@ class HomePage extends Component<Props> {
     return <DynamicTabNavigator />;
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: "center",
-    margin: 10
-  },
-  instructions: {
-    textAlign: "center",
-    color: "#333333",
-    marginBottom: 5
-  }
-});
 
 const mapStateToProps = state => ({
   nav: state.nav

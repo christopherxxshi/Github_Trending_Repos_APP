@@ -1,34 +1,36 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, Button} from 'react-native';
 import {createMaterialTopTabNavigator, createAppContainer} from 'react-navigation';
 import NavigationUtil from "../navigator/NavigationUtil";
 
 type Props = {};
 export default class PopularPage extends Component<Props> {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.tabNames = ['Java', "Javascript", "Python", "IOS", "React", "Vue"];
     }
-    _genTabs(){
+
+    _genTabs() {
         const tabs = {};
-        this.tabNames.forEach((item, index) =>{
+        this.tabNames.forEach((item, index) => {
             tabs[`tab${index}`] = {
-                screen: props => <PopularTab {...props} tabLabel = {item}/>,
-                navigationOptions:{
+                screen: props => <PopularTab {...props} tabLabel={item}/>,
+                navigationOptions: {
                     title: item
                 }
             }
         })
         return tabs;
     }
-    render(){
+
+    render() {
         const TabNavigator = createAppContainer(createMaterialTopTabNavigator(
-            this._genTabs(),{
-                tabBarOptions:{
-                    tabStyle:styles.tabStyle,
+            this._genTabs(), {
+                tabBarOptions: {
+                    tabStyle: styles.tabStyle,
                     upperCaseLabel: false,
                     scrollEnabled: true,
-                    style:{
+                    style: {
                         backgroundColor: '#678'
                     },
                     indicatorStyle: styles.indicatorStyle,
@@ -56,6 +58,18 @@ class PopularTab extends Component<Props> {
                     }}>
                     Jump to DetailPage
                 </Text>
+                <Button
+                    title={"Fetch Demo"}
+                    onPress={() => {
+                        NavigationUtil.goPage({navigation: this.props.navigation}, "FetchDemoPage")
+                    }}
+                />
+                <Button
+                    title={"Data Store Demo"}
+                    onPress={() => {
+                        NavigationUtil.goPage({navigation: this.props.navigation}, "DataStoreDemoPage")
+                    }}
+                />
             </View>
         );
     }
@@ -69,11 +83,11 @@ const styles = StyleSheet.create({
     tabStyle: {
         minWidth: 50
     },
-    indicatorStyle:{
+    indicatorStyle: {
         height: 2,
         backgroundColor: 'white'
     },
-    labelStyle:{
+    labelStyle: {
         fontSize: 13,
         marginTop: 6,
         marginBottom: 6

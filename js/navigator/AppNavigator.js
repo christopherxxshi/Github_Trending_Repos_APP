@@ -9,6 +9,8 @@ import {createReactNavigationReduxMiddleware, createReduxContainer} from 'react-
 import WelcomePage from "../page/WelcomePage";
 import HomePage from "../page/HomePage";
 import DetailPage from "../page/DetailPage";
+import FetchDemoPage from '../page/FetchDemoPage';
+import DataStoreDemoPage from '../page/DataStoreDemoPage';
 
 export const rootCom = 'Init';
 
@@ -30,6 +32,18 @@ const MainNavigator = createStackNavigator({
     },
     DetailPage: {
         screen: DetailPage,
+        navigationOptions: {
+            //header: null
+        }
+    },
+    FetchDemoPage:{
+        screen: FetchDemoPage,
+        navigationOptions: {
+            //header: null
+        }
+    },
+    DataStoreDemoPage:{
+        screen: DataStoreDemoPage,
         navigationOptions: {
             //header: null
         }
