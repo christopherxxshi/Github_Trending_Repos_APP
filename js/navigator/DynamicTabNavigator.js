@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {Platform, StyleSheet, Text, View} from "react-native";
+import {DeviceInfo} from "react-native";
 import {createAppContainer, createBottomTabNavigator, BottomTabBar} from "react-navigation";
 import {connect} from 'react-redux';
 
@@ -110,5 +110,5 @@ class TabBarComponent extends React.Component{
 }
 const mapStateToProps = state => ({
     theme: state.theme.theme,
-})
+});
 export default connect(mapStateToProps)(DynamicTabNavigator);

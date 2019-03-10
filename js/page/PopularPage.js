@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, StyleSheet, Text, View, ActivityIndicator, RefreshControl} from 'react-native';
+import {FlatList, StyleSheet, Text, View, ActivityIndicator, RefreshControl, DeviceInfo} from 'react-native';
 import {createMaterialTopTabNavigator, createAppContainer} from 'react-navigation';
 import NavigationUtil from "../navigator/NavigationUtil";
 import Toast from 'react-native-easy-toast';
@@ -7,7 +7,6 @@ import {connect} from 'react-redux';
 import actions from "../action/index";
 import PopularItem from '../common/PopularItem';
 import NavigationBar from '../common/NavigationBar';
-
 const URL = "https://api.github.com/search/repositories?q=";
 const QUERY_STR = '&sort=stars';
 const THEME_COLOR = '#678';
@@ -50,7 +49,8 @@ export default class PopularPage extends Component<Props> {
                     upperCaseLabel: false,
                     scrollEnabled: true,
                     style: {
-                        backgroundColor: '#678'
+                        backgroundColor: '#678',
+                        height: 30
                     },
                     indicatorStyle: styles.indicatorStyle,
                     labelStyle: styles.labelStyle
@@ -58,7 +58,7 @@ export default class PopularPage extends Component<Props> {
             }
         ));
         return (
-            <View style={{flex: 1, marginTop: 30}}>
+            <View style={{flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0}}>
                 {navigationBar}
                 <TabNavigator/>
             </View>
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     tabStyle: {
-        minWidth: 50
+        padding: 0
     },
     indicatorStyle: {
         height: 2,
@@ -193,8 +193,7 @@ const styles = StyleSheet.create({
     },
     labelStyle: {
         fontSize: 13,
-        marginTop: 6,
-        marginBottom: 6
+        margin: 0,
     },
     indicatorContainer: {
         alignItems: 'center'
