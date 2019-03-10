@@ -1,5 +1,5 @@
 {
-  "name": "Github_RN",
+  "name": "Github_Trending_Repos_APP",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -7,6 +7,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "prop-types": "^15.7.2",
     "react": "16.6.3",
     "react-native": "0.58.6",
     "react-native-easy-toast": "^1.2.0",

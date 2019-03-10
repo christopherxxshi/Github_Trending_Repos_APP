@@ -1,7 +1,6 @@
 import React, {Component} from "react";
 import {Platform, StyleSheet, Text, View} from "react-native";
-import {createAppContainer, createBottomTabNavigator} from "react-navigation";
-import {BottomTabBar} from 'react-navigation-tabs';
+import {createAppContainer, createBottomTabNavigator, BottomTabBar} from "react-navigation";
 import {connect} from 'react-redux';
 
 

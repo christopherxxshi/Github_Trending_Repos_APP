@@ -1,95 +1,87 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button} from 'react-native';
+import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
 import {createMaterialTopTabNavigator, createAppContainer} from 'react-navigation';
 import NavigationUtil from "../navigator/NavigationUtil";
+import NavigationBar from "../common/NavigationBar";
+import Feather from 'react-native-vector-icons/Feather';
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
+const THEME_COLOR = '#678';
 type Props = {};
 export default class MyPage extends Component<Props> {
-  constructor(props) {
-    super(props);
-    this.tabNames = ['Java', "Javascript", "Python", "IOS", "React", "Vue"];
-  }
 
-  _genTabs() {
-    const tabs = {};
-    this.tabNames.forEach((item, index) => {
-      tabs[`tab${index}`] = {
-        screen: props => <PopularTab {...props} tabLabel={item}/>,
-        navigationOptions: {
-          title: item
-        }
-      }
-    })
-    return tabs;
-  }
+    getRightButton() {
+        return <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity
+                onPress={() => {
+                }}
+            >
+                <View style={{padding: 5, marginRight: 8}}>
+                    <Feather
+                        name={'search'}
+                        size={24}
+                        style={{color: 'white'}}
+                    />
+                </View>
 
-  render() {
-    const TabNavigator = createAppContainer(createMaterialTopTabNavigator(
-        this._genTabs(), {
-          tabBarOptions: {
-            tabStyle: styles.tabStyle,
-            upperCaseLabel: false,
-            scrollEnabled: true,
-            style: {
-              backgroundColor: '#678'
-            },
-            indicatorStyle: styles.indicatorStyle,
-            labelStyle: styles.labelStyle
-          }
-        }
-    ));
-    return (
-        <View style={{flex: 1, marginTop: 30}}>
-          <TabNavigator/>
+            </TouchableOpacity>
         </View>
-    );
-  }
+    }
+
+    getLeftButton(callBack) {
+        return <TouchableOpacity
+            style={{padding: 8, paddingLeft: 12}}
+            onPress={callBack}>
+            <Ionicons
+                name={'ios-arrow-back'}
+                size={26}
+                style={{color: 'white'}}/>
+        </TouchableOpacity>
+    }
+
+    render() {
+        let statusBar = {
+            backgroundColor: THEME_COLOR,
+            barStyle: 'light-content',
+        };
+        let navigationBar =
+            <NavigationBar
+                title={'My Info'}
+                statusBar={statusBar}
+                style={{backgroundColor: THEME_COLOR}}
+                rightButton={this.getRightButton()}
+                leftButton={this.getLeftButton()}
+            />;
+        return (
+            <View style={styles.container}>
+                {navigationBar}
+                <Text
+                    onPress={() => {
+                        NavigationUtil.goPage({navigation: this.props.navigation}, "DetailPage")
+                    }}>
+                    Jump to DetailPage
+                </Text>
+                <Button
+                    title={"Fetch Demo"}
+                    onPress={() => {
+                        NavigationUtil.goPage({navigation: this.props.navigation}, "FetchDemoPage")
+                    }}
+                />
+                <Button
+                    title={"Data Store Demo"}
+                    onPress={() => {
+                        NavigationUtil.goPage({navigation: this.props.navigation}, "DataStoreDemoPage")
+                    }}
+                />
+            </View>
+        );
+    }
 }
 
-class PopularTab extends Component<Props> {
-  render() {
-    const {tabLabel} = this.props;
-    return (
-        <View style={styles.container}>
-          <Text> {tabLabel}</Text>
-          <Text
-              onPress={() => {
-                NavigationUtil.goPage({navigation: this.props.navigation}, "DetailPage")
-              }}>
-            Jump to DetailPage
-          </Text>
-          <Button
-              title={"Fetch Demo"}
-              onPress={() => {
-                NavigationUtil.goPage({navigation: this.props.navigation}, "FetchDemoPage")
-              }}
-          />
-          <Button
-              title={"Data Store Demo"}
-              onPress={() => {
-                NavigationUtil.goPage({navigation: this.props.navigation}, "DataStoreDemoPage")
-              }}
-          />
-        </View>
-    );
-  }
-}
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 30
-  },
-  tabStyle: {
-    minWidth: 50
-  },
-  indicatorStyle: {
-    height: 2,
-    backgroundColor: 'white'
-  },
-  labelStyle: {
-    fontSize: 13,
-    marginTop: 6,
-    marginBottom: 6
-  }
+    container: {
+        flex: 1,
+        marginTop: 30
+    }
 });
