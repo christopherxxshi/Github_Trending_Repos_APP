@@ -1,0 +1,57 @@
+{
+  "aboutMe": {
+    "Tutorial": {
+      "name": "Tutorial",
+      "icon": "ios-bookmarks",
+      "items": [
+        {
+          "title": "Github Repo",
+          "url": "https://github.com/christopherxxshi/Github_Trending_Repos_APP"
+        }
+      ]
+    },
+    "Blog": {
+      "name": "Personal Website",
+      "icon": "ios-laptop",
+      "items": [
+        {
+          "title": "Blog",
+          "url": "http://chrisshi.info"
+        },
+        {
+          "title": "GitHub",
+          "url": "https://github.com/christopherxxshi"
+        },
+
+      ]
+    },
+    "Contact": {
+      "name": "Contact",
+      "icon": "ios-contacts",
+      "items": {
+        "Email": {
+          "title": "Email",
+          "account": "uschrisshi@gmail.com"
+        }
+      }
+    },
+  },
+  "info": {
+    "html_url": "https://github.com/christopherxxshi/",
+    "url": "https://api.github.com/repos/christopherxxshi/",
+    "currentRepoUrl": "https://github.com/christopherxxshi/Github_Trending_Repos_APP"
+  },
+  "author": {
+    "name": "Chris Shi",
+    "description": "Grad student in SIT. Focusing on full stack development",
+    "avatar": "https://christopherxxshi.github.io/blog/img/avatar.jpg",
+    "backgroundImg": "https://images.unsplash.com/photo-1552057465-c1f535fc75c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+    "url": "http://chrisshi.info"
+  },
+  "app": {
+    "name": "Github Trending Repos",
+    "description": "A cross-platform app to browse repositories and trending projects on GitHub by React Native.",
+    "avatar": "http://www.devio.org/io/GitHubPopular/img/ic_app.png",
+    "backgroundImg": "https://images.unsplash.com/photo-1552057465-c1f535fc75c0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80"
+  }
+}

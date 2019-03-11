@@ -1,42 +1,43 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
+import {ScrollView, StyleSheet, Text, View, Button, TouchableOpacity} from 'react-native';
+import {connect} from "react-redux";
 import {createMaterialTopTabNavigator, createAppContainer} from 'react-navigation';
 import NavigationUtil from "../navigator/NavigationUtil";
 import NavigationBar from "../common/NavigationBar";
 import Feather from 'react-native-vector-icons/Feather';
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import {MORE_MENU} from "../common/MORE_MENU";
+import GlobalStyles from "../res/styles/GlobalStyles";
+import ViewUtil from "../util/ViewUtils";
 
 const THEME_COLOR = '#678';
 type Props = {};
-export default class MyPage extends Component<Props> {
 
-    getRightButton() {
-        return <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity
-                onPress={() => {
-                }}
-            >
-                <View style={{padding: 5, marginRight: 8}}>
-                    <Feather
-                        name={'search'}
-                        size={24}
-                        style={{color: 'white'}}
-                    />
-                </View>
+class MyPage extends Component<Props> {
 
-            </TouchableOpacity>
-        </View>
+
+    onClick(menu) {
+        let RouteName, params = {};
+        switch (menu) {
+            case MORE_MENU.Tutorial:
+                RouteName = 'WebViewPage';
+                params.title = 'Tutorial';
+                params.url = 'https://github.com/christopherxxshi/Github_Trending_Repos_APP';
+                break;
+            case MORE_MENU.About:
+                RouteName = 'AboutPage';
+                break;
+            case MORE_MENU.About_Author:
+                RouteName = 'AboutMePage';
+                break;
+        }
+        if (RouteName) {
+            NavigationUtil.goPage(params, RouteName);
+        }
     }
 
-    getLeftButton(callBack) {
-        return <TouchableOpacity
-            style={{padding: 8, paddingLeft: 12}}
-            onPress={callBack}>
-            <Ionicons
-                name={'ios-arrow-back'}
-                size={26}
-                style={{color: 'white'}}/>
-        </TouchableOpacity>
+    getItem(menu) {
+        return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
     }
 
     render() {
@@ -49,39 +50,102 @@ export default class MyPage extends Component<Props> {
                 title={'My Info'}
                 statusBar={statusBar}
                 style={{backgroundColor: THEME_COLOR}}
-                rightButton={this.getRightButton()}
-                leftButton={this.getLeftButton()}
             />;
         return (
-            <View style={styles.container}>
+            <View style={GlobalStyles.root_container}>
                 {navigationBar}
-                <Text
-                    onPress={() => {
-                        NavigationUtil.goPage({navigation: this.props.navigation}, "DetailPage")
-                    }}>
-                    Jump to DetailPage
-                </Text>
-                <Button
-                    title={"Fetch Demo"}
-                    onPress={() => {
-                        NavigationUtil.goPage({navigation: this.props.navigation}, "FetchDemoPage")
-                    }}
-                />
-                <Button
-                    title={"Data Store Demo"}
-                    onPress={() => {
-                        NavigationUtil.goPage({navigation: this.props.navigation}, "DataStoreDemoPage")
-                    }}
-                />
+                <ScrollView>
+                    <TouchableOpacity
+                        style={styles.item}
+                        onPress={() => this.onClick(MORE_MENU.About)}
+                    >
+                        <View style={styles.about_left}>
+                            <Ionicons
+                                name={MORE_MENU.About.icon}
+                                size={40}
+                                style={{
+                                    marginRight: 10,
+                                    color: THEME_COLOR
+                                }}
+                            />
+                            <Text>GitHub Popular</Text>
+                        </View>
+                        <Ionicons
+                            name={'ios-arrow-forward'}
+                            size={16}
+                            style={{
+                                marginRight: 10,
+                                alignSelf: 'center',
+                                color: THEME_COLOR,
+                            }}/>
+                    </TouchableOpacity>
+                    <View style={GlobalStyles.line}/>
+                    {this.getItem(MORE_MENU.Tutorial)}
+                    {/*Customize Trending*/}
+                    <Text style={styles.groupTitle}>Customize Trending</Text>
+                    {/*Customize Language*/}
+                    {this.getItem(MORE_MENU.Custom_Language)}
+                    {/*Sort Language*/}
+                    <View style={GlobalStyles.line}/>
+                    {this.getItem(MORE_MENU.Sort_Language)}
+
+                    {/*Customize Popular*/}
+                    <Text style={styles.groupTitle}>Customize Popular</Text>
+                    {/*Custom Key*/}
+                    {this.getItem(MORE_MENU.Custom_Key)}
+                    {/*Sort Key*/}
+                    <View style={GlobalStyles.line}/>
+                    {this.getItem(MORE_MENU.Sort_Key)}
+                    {/*Remove Key*/}
+                    <View style={GlobalStyles.line}/>
+                    {this.getItem(MORE_MENU.Remove_Key)}
+
+                    {/*Settings*/}
+                    <Text style={styles.groupTitle}>Settings</Text>
+                    {/*Custom Theme*/}
+                    {this.getItem(MORE_MENU.Custom_Theme)}
+                    {/*About Author*/}
+                    <View style={GlobalStyles.line}/>
+                    {this.getItem(MORE_MENU.About_Author)}
+                    <View style={GlobalStyles.line}/>
+                    {/*Feedback*/}
+                    {this.getItem(MORE_MENU.Feedback)}
+                </ScrollView>
             </View>
         );
     }
 }
 
 
+const mapStateToProps = state => ({});
+
+const mapDispatchToProps = dispatch => ({
+    onThemeChange: (theme) => dispatch(onThemeChange(theme)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyPage);
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         marginTop: 30
+    },
+    about_left: {
+        alignItems: 'center',
+        flexDirection: 'row'
+    },
+    item: {
+        backgroundColor: 'white',
+        padding: 10,
+        height: 90,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        flexDirection: 'row'
+    },
+    groupTitle: {
+        marginLeft: 10,
+        marginTop: 10,
+        marginBottom: 5,
+        fontSize: 12,
+        color: 'gray'
     }
 });
