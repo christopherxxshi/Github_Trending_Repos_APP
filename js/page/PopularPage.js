@@ -7,10 +7,18 @@ import {connect} from 'react-redux';
 import actions from "../action/index";
 import PopularItem from '../common/PopularItem';
 import NavigationBar from '../common/NavigationBar';
+import FavoriteDao from "../expand/dao/FavoriteDao";
+import {FLAG_STORAGE} from "../expand/dao/DataStore";
+import FavoriteUtil from "../util/FavoriteUtil";
+import EventBus from "react-native-event-bus";
+import EventTypes from "../util/EventTypes";
+
+
 const URL = "https://api.github.com/search/repositories?q=";
 const QUERY_STR = '&sort=stars';
 const THEME_COLOR = '#678';
 const PAGE_SIZE = 10;
+const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 
 type Props = {};
 export default class PopularPage extends Component<Props> {
@@ -71,10 +79,24 @@ class PopularTab extends Component<Props> {
         super(props);
         const {tabLabel} = this.props;
         this.storeName = tabLabel;
+        this.isFavoriteChanged = false;
     }
 
     componentDidMount() {
         this.loadData();
+        EventBus.getInstance().addListener(EventTypes.favorite_changed_popular, this.favoriteChangeListener = () => {
+            this.isFavoriteChanged = true;
+        });
+        EventBus.getInstance().addListener(EventTypes.bottom_tab_select, this.bottomTabSelectListener = (data) => {
+            if (data.to === 0 && this.isFavoriteChanged) {
+                this.loadData(null, true);
+            }
+        })
+    }
+
+    componentWillUnmount() {
+        EventBus.getInstance().removeListener(this.favoriteChangeListener);
+        EventBus.getInstance().removeListener(this.bottomTabSelectListener);
     }
 
     _store() {
@@ -84,23 +106,25 @@ class PopularTab extends Component<Props> {
             store = {
                 items: [],
                 isLoading: false,
-                projectModes: [],
+                projectModels: [],
                 hideLoadingMore: true,
             }
         }
         return store;
     }
 
-    loadData(loadMore) {
-        const {onRefreshPopular, onLoadMorePopular} = this.props;
+    loadData(loadMore, refreshFavorite) {
+        const {onRefreshPopular, onLoadMorePopular, onFlushPopularFavorite} = this.props;
         const store = this._store();
         const url = this.genFetchUrl(this.storeName);
         if (loadMore) {
-            onLoadMorePopular(this.storeName, ++store.pageIndex, PAGE_SIZE, store.items, callback => {
+            onLoadMorePopular(this.storeName, ++store.pageIndex, PAGE_SIZE, store.items, favoriteDao, callback => {
                 this.refs.toast.show('No more data')
             })
+        } else if (refreshFavorite) {
+            onFlushPopularFavorite(this.storeName, store.pageIndex, PAGE_SIZE, store.items, favoriteDao);
         } else {
-            onRefreshPopular(this.storeName, url, PAGE_SIZE);
+            onRefreshPopular(this.storeName, url, PAGE_SIZE, favoriteDao);
         }
     }
 
@@ -111,10 +135,16 @@ class PopularTab extends Component<Props> {
     renderItem(data) {
         const item = data.item;
         return <PopularItem
-            item={item}
-            onSelect={() => {
+            projectModel={item}
+            onSelect={(callback) => {
+                NavigationUtil.goPage({
+                    projectModel: item,
+                    flag: FLAG_STORAGE.flag_popular,
+                    callback
+                }, 'DetailPage')
             }
             }
+            onFavorite={(item, isFavorite) => FavoriteUtil.onFavorite(favoriteDao, item, isFavorite, FLAG_STORAGE.flag_popular)}
         />
     }
 
@@ -135,9 +165,9 @@ class PopularTab extends Component<Props> {
         return (
             <View style={styles.container}>
                 <FlatList
-                    data={store.projectModes}
+                    data={store.projectModels}
                     renderItem={data => this.renderItem(data)}
-                    keyExtractor={item => "" + item.id}
+                    keyExtractor={item => "" + item.item.id}
                     refreshControl={
                         <RefreshControl
                             title={"Loading"}
@@ -175,8 +205,9 @@ const mapStateToProps = state => ({
     popular: state.popular
 });
 const mapDispatchToProps = dispatch => ({
-    onRefreshPopular: (storeName, url, pageSize) => dispatch(actions.onRefreshPopular(storeName, url, pageSize)),
-    onLoadMorePopular: (storeName, pageIndex, pageSize, items, callback) => dispatch(actions.onLoadMorePopular(storeName, pageIndex, pageSize, items, callback)),
+    onRefreshPopular: (storeName, url, pageSize, favoriteDao) => dispatch(actions.onRefreshPopular(storeName, url, pageSize, favoriteDao)),
+    onLoadMorePopular: (storeName, pageIndex, pageSize, items, favoriteDao, callback) => dispatch(actions.onLoadMorePopular(storeName, pageIndex, pageSize, items, favoriteDao, callback)),
+    onFlushPopularFavorite: (storeName, pageIndex, pageSize, items, favoriteDao) => dispatch(actions.onFlushPopularFavorite(storeName, pageIndex, pageSize, items, favoriteDao)),
 });
 const PopularTabPage = connect(mapStateToProps, mapDispatchToProps)(PopularTab);
 

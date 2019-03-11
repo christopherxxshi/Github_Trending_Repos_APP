@@ -49,7 +49,7 @@ export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [
                     error: 'no more',
                     storeName: storeName,
                     pageIndex: --pageIndex,
-                    projectModes: dataArray
+                    projectModels: dataArray
                 })
             } else {
                 let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex;
@@ -57,9 +57,24 @@ export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [
                     type: Types.TRENDING_LOAD_MORE_SUCCESS,
                     storeName,
                     pageIndex,
-                    projectModes: dataArray.slice(0, max),
+                    projectModels: dataArray.slice(0, max),
                 })
             }
         }, 500);
+    }
+}
+
+export function onFlushTrendingFavorite(storeName, pageIndex, pageSize, dataArray = [], favoriteDao) {
+    return dispatch => {
+
+        let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex;
+        _projectModels(dataArray.slice(0, max), favoriteDao, data => {
+            dispatch({
+                type: Types.TRENDING_FLUSH_FAVORITE,
+                storeName,
+                pageIndex,
+                projectModels: data,
+            })
+        })
     }
 }

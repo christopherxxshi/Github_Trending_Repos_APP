@@ -10,7 +10,7 @@ export default function onAction(state = defaultState, action) {
                 [action.storeName]: {
                     ...state[action.storeName],
                     items: action.items, // original data
-                    projectModes: action.projectModes, // data need to be displayed
+                    projectModels: action.projectModels, // data need to be displayed
                     isLoading: false,
                     hideLoadingMore: false,
                     pageIndex: action.pageIndex
@@ -38,7 +38,7 @@ export default function onAction(state = defaultState, action) {
                 ...state,
                 [action.storeName]: {
                     ...state[action.storeName],
-                    projectModes: action.projectModes,
+                    projectModels: action.projectModels,
                     hideLoadingMore: false,
                     pageIndex: action.pageIndex
                 }
@@ -50,6 +50,14 @@ export default function onAction(state = defaultState, action) {
                     ...state[action.storeName],
                     hideLoadingMore: true,
                     pageIndex: action.pageIndex
+                }
+            };
+        case Types.TRENDING_FLUSH_FAVORITE:
+            return {
+                ...state,
+                [action.storeName]: {
+                    ...state[action.storeName],
+                    projectModels: action.projectModels,
                 }
             };
         default:
