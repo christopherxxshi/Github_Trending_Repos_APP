@@ -7,7 +7,6 @@ import AboutCommon, {FLAG_ABOUT} from "./AboutCommon";
 import config from '../../res/data/config'
 import GlobalStyles from "../../res/styles/GlobalStyles";
 
-const THEME_COLOR = '#678';
 type Props = {};
 
 export default class AboutPage extends Component<Props> {
@@ -26,13 +25,14 @@ export default class AboutPage extends Component<Props> {
     }
 
     onClick(menu) {
-        let RouteName, params = {};
+        const {theme} = this.params;
+        let RouteName, params = {theme};
         switch (menu) {
             case MORE_MENU.Tutorial:
                 RouteName = 'WebViewPage';
                 params.title = 'Tutorial';
                 params.url = 'https://github.com/christopherxxshi/Github_Trending_Repos_APP';
-                break
+                break;
             case MORE_MENU.About_Author:
                 RouteName = 'AboutMePage';
                 break;
@@ -56,7 +56,8 @@ export default class AboutPage extends Component<Props> {
     }
 
     getItem(menu) {
-        return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
+        const {theme} = this.params;
+        return ViewUtil.getMenuItem(() => this.onClick(menu), menu, theme.themeColor);
     }
 
     render() {

@@ -146,7 +146,7 @@ class CustomKeyPage extends Component<Props> {
             name={checked ? 'ios-checkbox' : 'md-square-outline'}
             size={20}
             style={{
-                color: THEME_COLOR,
+                color: theme.themeColor,
             }}/>
     }
 
@@ -168,7 +168,7 @@ class CustomKeyPage extends Component<Props> {
         let navigationBar = <NavigationBar
             title={title}
             leftButton={ViewUtil.getLeftBackButton(() => this.onBack())}
-            style={{backgroundColor: THEME_COLOR}}
+            style={theme.styles.navBar}
             rightButton={ViewUtil.getRightButton(rightButtonTitle, () => this.onSave())}
         />;
         return <View style={styles.container}>

@@ -10,15 +10,17 @@ import {MORE_MENU} from "../common/MORE_MENU";
 import GlobalStyles from "../res/styles/GlobalStyles";
 import ViewUtil from "../util/ViewUtils";
 import {FLAG_LANGUAGE} from "../expand/dao/LanguageDao";
+import actions from "../action";
 
-const THEME_COLOR = '#678';
+
 type Props = {};
 
 class MyPage extends Component<Props> {
 
 
     onClick(menu) {
-        let RouteName, params = {};
+        const {theme} = this.props;
+        let RouteName, params = {theme};
         switch (menu) {
             case MORE_MENU.Tutorial:
                 RouteName = 'WebViewPage';
@@ -32,6 +34,10 @@ class MyPage extends Component<Props> {
             case MORE_MENU.Sort_Language:
                 RouteName = 'SortKeyPage';
                 params.flag = FLAG_LANGUAGE.flag_language;
+                break;
+            case MORE_MENU.Custom_Theme:
+                const {onShowCustomThemeView} = this.props;
+                onShowCustomThemeView(true);
                 break;
             case MORE_MENU.Custom_Key:
             case MORE_MENU.Custom_Language:
@@ -54,19 +60,21 @@ class MyPage extends Component<Props> {
     }
 
     getItem(menu) {
-        return ViewUtil.getMenuItem(() => this.onClick(menu), menu, THEME_COLOR);
+        const {theme} = this.props;
+        return ViewUtil.getMenuItem(() => this.onClick(menu), menu, theme.themeColor);
     }
 
     render() {
+        const {theme} = this.props;
         let statusBar = {
-            backgroundColor: THEME_COLOR,
+            backgroundColor: theme.themeColor,
             barStyle: 'light-content',
         };
         let navigationBar =
             <NavigationBar
                 title={'My Info'}
                 statusBar={statusBar}
-                style={{backgroundColor: THEME_COLOR}}
+                style={theme.styles.navBar}
             />;
         return (
             <View style={GlobalStyles.root_container}>
@@ -82,7 +90,7 @@ class MyPage extends Component<Props> {
                                 size={40}
                                 style={{
                                     marginRight: 10,
-                                    color: THEME_COLOR
+                                    color: theme.themeColor
                                 }}
                             />
                             <Text>GitHub Popular</Text>
@@ -93,7 +101,7 @@ class MyPage extends Component<Props> {
                             style={{
                                 marginRight: 10,
                                 alignSelf: 'center',
-                                color: THEME_COLOR,
+                                color: theme.themeColor,
                             }}/>
                     </TouchableOpacity>
                     <View style={GlobalStyles.line}/>
@@ -134,10 +142,12 @@ class MyPage extends Component<Props> {
 }
 
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+    theme: state.theme.theme,
+});
 
 const mapDispatchToProps = dispatch => ({
-    onThemeChange: (theme) => dispatch(onThemeChange(theme)),
+    onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyPage);

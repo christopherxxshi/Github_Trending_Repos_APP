@@ -49,11 +49,11 @@ class TrendingPage extends Component<Props> {
 
     _genTabs() {
         const tabs = {};
-        const {keys} = this.props;
+        const {keys, theme} = this.props;
         keys.forEach((item, index) => {
             if (item.checked) {
                 tabs[`tab${index}`] = {
-                    screen: props => <TrendingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item.name}/>,
+                    screen: props => <TrendingTabPage {...props} timeSpan={this.state.timeSpan} tabLabel={item.name} theme={theme}/>,
                     navigationOptions: {
                         title: item.name
                     }
@@ -100,7 +100,9 @@ class TrendingPage extends Component<Props> {
     }
 
     _tabNav() {
-        if (!this.tabNav || !ArrayUtil.isEqual(this.preKeys, this.props.keys)) {
+        const {theme} = this.props;
+        if (theme !== this.theme || !this.tabNav || !ArrayUtil.isEqual(this.preKeys, this.props.keys)){
+            this.theme = theme;
             this.tabNav = createAppContainer(createMaterialTopTabNavigator(
                 this._genTabs(), {
                     tabBarOptions: {
@@ -108,7 +110,7 @@ class TrendingPage extends Component<Props> {
                         upperCaseLabel: false,
                         scrollEnabled: true,
                         style: {
-                            backgroundColor: '#678',
+                            backgroundColor: theme.themeColor,
                             height: 30
                         },
                         indicatorStyle: styles.indicatorStyle,
@@ -122,15 +124,15 @@ class TrendingPage extends Component<Props> {
     }
 
     render() {
-        const {keys} = this.props;
+        const {keys, theme} = this.props;
         let statusBar = {
-            backgroundColor: THEME_COLOR,
+            backgroundColor: theme.themeColor,
             barStyle: 'light-content',
         };
         let navigationBar = <NavigationBar
             titleView={this.renderTitleView()}
             statusBar={statusBar}
-            style={{backgroundColor: THEME_COLOR}}
+            style={theme.styles.navBar}
         />;
         const TabNavigator = keys.length ? this._tabNav() : null;
         return (
@@ -145,6 +147,7 @@ class TrendingPage extends Component<Props> {
 
 const mapTrendingStateToProps = state => ({
     keys: state.language.languages,
+    theme: state.theme.theme,
 });
 const mapTrendingDispatchToProps = dispatch => ({
     onLoadLanguage: (flag) => dispatch(actions.onLoadLanguage(flag))
@@ -219,11 +222,14 @@ class TrendingTab extends Component<Props> {
     }
 
     renderItem(data) {
+        const {theme} = this.props;
         const item = data.item;
         return <TrendingItem
+            theme={theme}
             projectModel={item}
             onSelect={(callback) => {
                 NavigationUtil.goPage({
+                    theme,
                     projectModel: item,
                     flag: FLAG_STORAGE.flag_trending,
                     callback,
@@ -247,6 +253,7 @@ class TrendingTab extends Component<Props> {
 
     render() {
         let store = this._store();
+        const {theme} = this.props;
         return (
             <View style={styles.container}>
                 <FlatList
@@ -256,11 +263,11 @@ class TrendingTab extends Component<Props> {
                     refreshControl={
                         <RefreshControl
                             title={"Loading"}
-                            titleColor={THEME_COLOR}
-                            colors={[THEME_COLOR]}
+                            titleColor={theme.themeColor}
+                            colors={[theme.themeColor]}
                             refreshing={store.isLoading}
                             onRefresh={() => this.loadData()}
-                            tintColor={THEME_COLOR}
+                            tintColor={theme.themeColor}
                         />
                     }
                     ListFooterComponent={() => this.genIndicator()}

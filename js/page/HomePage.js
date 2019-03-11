@@ -1,9 +1,9 @@
 import React, {Component} from "react";
-import {BackHandler} from 'react-native';
+import {View} from 'react-native';
 import {NavigationActions} from 'react-navigation';
-import {Platform, StyleSheet, Text, View} from "react-native";
 import BackPressComponent from "../common/BackPressComponent"
-
+import CustomTheme from '../page/CustomTheme';
+import actions from "../action";
 
 type Props = {};
 import NavigationUtil from "../navigator/NavigationUtil";
@@ -24,6 +24,14 @@ class HomePage extends Component<Props> {
         this.backPress.componentWillUnmount();
     }
 
+    renderCustomThemeView() {
+        const {customThemeViewVisible, onShowCustomThemeView} = this.props;
+        return (<CustomTheme
+            visible={customThemeViewVisible}
+            {...this.props}
+            onClose={() => onShowCustomThemeView(false)}
+        />)
+    }
     onBackPress = () => {
         const {dispatch, nav} = this.props;
         if (nav.routes[1].index === 0) {
@@ -35,14 +43,21 @@ class HomePage extends Component<Props> {
 
     render() {
         NavigationUtil.navigation = this.props.navigation;
-        return <DynamicTabNavigator/>;
+        return <View style={{flex: 1}}>
+            <DynamicTabNavigator/>
+            {this.renderCustomThemeView()}
+        </View>;
     }
 }
 
 const mapStateToProps = state => ({
     nav: state.nav,
-    theme: state.theme
+    customThemeViewVisible: state.theme.customThemeViewVisible,
 });
 
-export default connect(mapStateToProps)(HomePage)
+const mapDispatchToProps = dispatch => ({
+    onShowCustomThemeView: (show) => dispatch(actions.onShowCustomThemeView(show)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
 
