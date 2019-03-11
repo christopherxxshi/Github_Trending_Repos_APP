@@ -31,8 +31,17 @@ export default class ViewUtil {
             </TouchableOpacity>
         )
     }
+
     static getMenuItem(callBack, menu, color, expandableIco) {
         return ViewUtil.getSettingItem(callBack, menu.name, color, menu.Icons, menu.icon, expandableIco)
+    }
+
+    static getRightButton(title, callBack) {
+        return <TouchableOpacity
+            style={{alignItems: 'center',}}
+            onPress={callBack}>
+            <Text style={{fontSize: 20, color: '#FFFFFF', marginRight: 10}}>{title}</Text>
+        </TouchableOpacity>
     }
 
     static getLeftBackButton(callBack) {
