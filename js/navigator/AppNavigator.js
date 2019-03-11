@@ -14,6 +14,7 @@ import AboutPage from '../page/about/AboutPage';
 import AboutMePage from '../page/about/AboutMePage';
 import CustomKeyPage from '../page/CustomKeyPage';
 import SortKeyPage from '../page/SortKeyPage';
+import SearchPage from '../page/SearchPage';
 
 export const rootCom = 'Init';
 
@@ -65,6 +66,12 @@ const MainNavigator = createStackNavigator({
     },
     SortKeyPage: {
         screen: SortKeyPage,
+        navigationOptions: {
+            header: null,
+        }
+    },
+    SearchPage: {
+        screen: SearchPage,
         navigationOptions: {
             header: null,
         }

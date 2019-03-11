@@ -1,8 +1,9 @@
-import {onThemeChange,onShowCustomThemeView,onThemeInit} from './theme';
+import {onThemeChange, onShowCustomThemeView, onThemeInit} from './theme';
 import {onRefreshPopular, onLoadMorePopular, onFlushPopularFavorite} from './popular';
 import {onLoadMoreTrending, onRefreshTrending, onFlushTrendingFavorite} from './trending';
 import {onLoadFavoriteData} from './favorite';
 import {onLoadLanguage} from './language';
+import {onSearch, onLoadMoreSearch, onSearchCancel} from './search';
 
 export default {
     onThemeChange,
@@ -16,4 +17,7 @@ export default {
     onLoadLanguage,
     onShowCustomThemeView,
     onThemeInit,
+    onSearch,
+    onLoadMoreSearch,
+    onSearchCancel,
 }
