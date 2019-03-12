@@ -56,7 +56,7 @@ export default class DataStore {
 
     fetchNetData(url, flag) {
         return new Promise((resolve, reject) => {
-            if (flag != FLAG_STORAGE.flag_trending) {
+            if (flag !== FLAG_STORAGE.flag_trending) {
                 fetch(url)
                     .then((response) => {
                         if (response.ok) {
@@ -94,7 +94,6 @@ export default class DataStore {
         targetDate.setTime(timestamp);
         if (currentDate.getMonth() !== targetDate.getMonth()) return false;
         if (currentDate.getDate() !== targetDate.getDate()) return false;
-        if (currentDate.getHours() - targetDate.getHours() > 2) return false;
-        return true;
+        return currentDate.getHours() - targetDate.getHours() <= 2;
     }
 }

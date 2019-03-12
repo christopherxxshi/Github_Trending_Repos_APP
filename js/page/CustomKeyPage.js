@@ -162,6 +162,7 @@ class CustomKeyPage extends Component<Props> {
     }
 
     render() {
+        const {theme} = this.params;
         let title = this.isRemoveKey ? 'remove key' : 'customize';
         title = this.params.flag === FLAG_LANGUAGE.flag_language ? 'Customize language' : title;
         let rightButtonTitle = this.isRemoveKey ? 'remove' : 'save';

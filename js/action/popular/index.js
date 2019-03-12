@@ -40,7 +40,7 @@ export function onLoadMorePopular(storeName, pageIndex, pageSize, dataArray = []
                         type: Types.POPULAR_LOAD_MORE_SUCCESS,
                         storeName,
                         pageIndex,
-                        projectModels: dataArray.slice(0, max)
+                        projectModels: data
                     })
                 })
             }

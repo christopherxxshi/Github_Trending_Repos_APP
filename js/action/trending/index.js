@@ -1,6 +1,6 @@
 import Types from '../type';
 import DataStore, {FLAG_STORAGE} from '../../expand/dao/DataStore'
-import {handleData} from '../ActionUtil'
+import {_projectModels, handleData} from '../ActionUtil'
 
 /**
  * get trending data action
@@ -37,10 +37,10 @@ export function onRefreshTrending(storeName, url, pageSize) {
  * @param callBack
  * @returns {function(*)}
  */
-export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [], callBack) {
+export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [],favoriteDao, callBack) {
     return dispatch => {
         setTimeout(() => {
-            if ((pageIndex - 1) * pageSize >= dataArray.length) {
+            if ((pageIndex - 1) * pageSize >= dataArray.length) {//已加载完全部数据
                 if (typeof callBack === 'function') {
                     callBack('no more')
                 }
@@ -52,12 +52,15 @@ export function onLoadMoreTrending(storeName, pageIndex, pageSize, dataArray = [
                     projectModels: dataArray
                 })
             } else {
+                //本次和载入的最大数量
                 let max = pageSize * pageIndex > dataArray.length ? dataArray.length : pageSize * pageIndex;
-                dispatch({
-                    type: Types.TRENDING_LOAD_MORE_SUCCESS,
-                    storeName,
-                    pageIndex,
-                    projectModels: dataArray.slice(0, max),
+                _projectModels(dataArray.slice(0, max), favoriteDao, data => {
+                    dispatch({
+                        type: Types.TRENDING_LOAD_MORE_SUCCESS,
+                        storeName,
+                        pageIndex,
+                        projectModels: data,
+                    })
                 })
             }
         }, 500);
