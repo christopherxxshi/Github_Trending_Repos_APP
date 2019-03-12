@@ -1,9 +1,9 @@
 import React, {Component} from "react";
-import {View} from 'react-native';
 import {NavigationActions} from 'react-navigation';
 import BackPressComponent from "../common/BackPressComponent"
 import CustomTheme from '../page/CustomTheme';
 import actions from "../action";
+import SafeAreaViewPlus from "../common/SafeAreaViewPlus";
 
 type Props = {};
 import NavigationUtil from "../navigator/NavigationUtil";
@@ -32,6 +32,7 @@ class HomePage extends Component<Props> {
             onClose={() => onShowCustomThemeView(false)}
         />)
     }
+
     onBackPress = () => {
         const {dispatch, nav} = this.props;
         if (nav.routes[1].index === 0) {
@@ -42,17 +43,21 @@ class HomePage extends Component<Props> {
     };
 
     render() {
+        const {theme} = this.props;
         NavigationUtil.navigation = this.props.navigation;
-        return <View style={{flex: 1}}>
+        return <SafeAreaViewPlus
+            topColor={theme.themeColor}
+        >
             <DynamicTabNavigator/>
             {this.renderCustomThemeView()}
-        </View>;
+        </SafeAreaViewPlus>;
     }
 }
 
 const mapStateToProps = state => ({
     nav: state.nav,
     customThemeViewVisible: state.theme.customThemeViewVisible,
+    theme: state.theme.theme,
 });
 
 const mapDispatchToProps = dispatch => ({

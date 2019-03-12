@@ -8,7 +8,8 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View
+    View,
+    DeviceInfo
 } from 'react-native';
 import {connect} from 'react-redux';
 import actions from '../action/index'
@@ -23,6 +24,7 @@ import BackPressComponent from "../common/BackPressComponent";
 import GlobalStyles from '../res/styles/GlobalStyles'
 import ViewUtil from "../util/ViewUtils";
 import Utils from "../util/Utils";
+import SafeAreaViewPlus from "../common/SafeAreaViewPlus";
 
 const favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular);
 type Props = {};
@@ -99,9 +101,7 @@ class SearchPage extends Component<Props> {
             </View>
     }
 
-    /**
-     * 添加标签
-     */
+
     saveKey() {
         const {keys} = this.props;
         let key = this.inputKey;
@@ -168,7 +168,7 @@ class SearchPage extends Component<Props> {
         const {isLoading, projectModels, showBottomButton, hideLoadingMore} = this.props.search;
         const {theme} = this.params;
         let statusBar = null;
-        if (Platform.OS === 'ios') {
+        if (Platform.OS === 'ios' && !DeviceInfo.isIPhoneX_deprecated) {
             statusBar = <View style={[styles.statusBar, {backgroundColor: theme.themeColor}]}/>
         }
         let listView = !isLoading ? <FlatList
@@ -226,13 +226,16 @@ class SearchPage extends Component<Props> {
             {listView}
         </View>;
         return (
-            <View style={styles.container}>
+            <SafeAreaViewPlus
+                style={GlobalStyles.root_container}
+                topColor={theme.themeColor}
+            >
                 {statusBar}
                 {this.renderNavBar()}
                 {resultView}
                 {bottomButton}
                 <Toast ref={toast => this.toast = toast}/>
-            </View>
+            </SafeAreaViewPlus>
         );
     }
 }

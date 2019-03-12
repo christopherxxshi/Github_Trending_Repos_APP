@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
-import {WebView, Platform, StyleSheet,  View, DeviceInfo, TouchableOpacity} from 'react-native';
+import {WebView, Platform, StyleSheet, View, DeviceInfo, TouchableOpacity} from 'react-native';
 import NavigationBar from '../common/NavigationBar'
 import ViewUtil from "../util/ViewUtils";
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import NavigationUtil from "../navigator/NavigationUtil";
 import BackPressComponent from "../common/BackPressComponent";
 import FavoriteDao from "../expand/dao/FavoriteDao";
+import SafeAreaViewPlus from "../common/SafeAreaViewPlus"
 
 const TRENDING_URL = 'https://github.com/';
 
@@ -22,7 +23,7 @@ export default class DetailPage extends Component<Props> {
             title: title,
             url: this.url,
             canGoBack: false,
-            isFavorite:projectModel.isFavorite
+            isFavorite: projectModel.isFavorite
         };
         this.backPress = new BackPressComponent({backPress: () => this.onBackPress()});
     }
@@ -62,6 +63,7 @@ export default class DetailPage extends Component<Props> {
             this.favoriteDao.removeFavoriteItem(key);
         }
     }
+
     renderRightButton() {
         return (<View style={{flexDirection: 'row'}}>
             <TouchableOpacity
@@ -98,7 +100,9 @@ export default class DetailPage extends Component<Props> {
             rightButton={this.renderRightButton()}
         />;
         return (
-            <View style={styles.container}>
+            <SafeAreaViewPlus
+                topColor={theme.themeColor}
+            >
                 {navigationBar}
                 <WebView
                     ref={webView => this.webView = webView}
@@ -106,7 +110,7 @@ export default class DetailPage extends Component<Props> {
                     onNavigationStateChange={e => this.onNavigationStateChange(e)}
                     source={{uri: this.state.url}}
                 />
-            </View>
+            </SafeAreaViewPlus>
         );
     }
 }

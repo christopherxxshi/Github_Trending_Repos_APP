@@ -93,7 +93,7 @@ class PopularPage extends Component<Props> {
             }
         )) : null;
         return (
-            <View style={{flex: 1, marginTop: DeviceInfo.isIPhoneX_deprecated ? 30 : 0}}>
+            <View style={styles.container}>
                 {navigationBar}
                 {TabNavigator && <TabNavigator/>}
             </View>
